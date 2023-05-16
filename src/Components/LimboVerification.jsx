@@ -1,6 +1,14 @@
 import React from "react";
 
 const LimboVerification = () => {
+  const queryParams = new URLSearchParams(window.location.search);
+  const clientSeed = queryParams.get("clientseed");
+  const serverSeed = queryParams.get("serverseed");
+  const nonce = queryParams.get("nonce");
+
+  console.log("Here is the clientSeed ::: ", clientSeed);
+  console.log("Here is the server seed ::: ", serverSeed);
+  console.log("Here is the nonce ::: ", nonce);
   return (
     <div id="app" class="main">
       <h1 class="text-center pb-5">Limbo verify</h1>
