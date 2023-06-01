@@ -3,6 +3,7 @@ import { useState } from "react";
 import hashVerify from "./verifyMultiplier";
 import { Routes, Route } from "react-router";
 import LimboVerification from "./Components/LimboVerification";
+import PlinkoVerification from "./Components/PlinkoVerification";
 
 const App = () => {
   const queryParams = new URLSearchParams(window.location.search);
@@ -188,6 +189,7 @@ const App = () => {
       />
 
       <Route path="/limbo" element={<LimboVerification />} />
+      <Route path="/Plinko" element={<PlinkoVerification />} />
     </Routes>
   );
 };
