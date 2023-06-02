@@ -1,355 +1,183 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import * as CryptoJS from "crypto-js";
 
 function PlinkoVerification() {
+  const queryParams = new URLSearchParams(window.location.search);
+  const clientSeed = queryParams.get("clientSeed");
+  const serverSeed = queryParams.get("severSeed");
+  const nonce = queryParams.get("nonce");
+  const serverHashed = queryParams.get("serverSeedhashed");
+  const [clienthash, setClientHash] = useState(null);
+  const [plinkoResult, setplinkoResult] = useState(null);
+  // http://localhost:3000/limbo/?clientSeed=clientSeed&severSeed=serverSeed&nonce=3
+  const result_hash = (serverSeed, clientSeed, nonce) => {
+    const message = clientSeed + ":" + nonce;
+    return CryptoJS.HmacSHA256(message, serverSeed).toString(CryptoJS.enc.Hex);
+  };
+  const hmac_sha512 = (serverSeed, clientSeed, nonce) => {
+    const msg = clientSeed + ":" + nonce;
+    return CryptoJS.HmacSHA512(msg, serverSeed).toString(CryptoJS.enc.Hex);
+  };
+
+  const result_hash_list = () => {
+    return String(hmac_sha512(serverSeed, clientSeed, nonce)).match(/.{2}/g);
+  };
+  const hexToDecimal = (hex) => parseInt(hex, 16);
+
+  const gameResult = () => {
+    let res = [];
+    let hexArr = result_hash_list();
+    for (let i = 0, l = hexArr.length; i < l; i += 4) {
+      let num =
+        hexToDecimal(hexArr[i]) / Math.pow(256, 1) +
+        hexToDecimal(hexArr[i + 1]) / Math.pow(256, 2) +
+        hexToDecimal(hexArr[i + 2]) / Math.pow(256, 3) +
+        hexToDecimal(hexArr[i + 3]) / Math.pow(256, 4);
+      res.push(num);
+    }
+    return res;
+  };
+  useEffect(() => {
+    setplinkoResult(
+      gameResult(result_hash(serverSeed, clientSeed, nonce), serverSeed)
+    );
+    setClientHash(hmac_sha512(serverSeed, clientSeed, nonce));
+  }, []);
+  const Hash = [
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
+    40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58,
+    59, 60, 61, 62, 63,
+  ];
   return (
     <div className="main">
-        <h1 className="text-center pb-3">Plinko verify</h1>
-        <hr/>
-        <form className="py-3">
-            <h2 className="text-center">Input</h2>
-            <div className="form-group"><input placeholder="Client Seed" className="form-control"/></div>
-            <div className="form-group"><input placeholder="Server Seed" className="form-control"/></div>
-            <div className="form-group"><input placeholder="Nonce" className="form-control"/></div>
-        </form>
-        <hr/>
-        <form className="py-3">
-            <h2 className="text-center pb-3">Output</h2>
-            <div className="form-group"><label>sha256(server_seed)</label> <input readonly="readonly" className="form-control" /></div>
-            <div className="form-group"><label>hmac_sha512(client_seed:nonce, server_seed)</label> <input readonly="readonly" className="form-control"/></div>
-            <hr />
-            <h5>Convert each set of four bytes into a number</h5>
-            <div className="form-group" style={{overflowX: "auto"}}>
-                <table className="table table-sm table-bordered" style={{width: "1200px", marginBottom:"0"}}>
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <td>0</td>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
-                        <td>4</td>
-                        <td>5</td>
-                        <td>6</td>
-                        <td>7</td>
-                        <td>8</td>
-                        <td>9</td>
-                        <td>10</td>
-                        <td>11</td>
-                        <td>12</td>
-                        <td>13</td>
-                        <td>14</td>
-                        <td>15</td>
-                        <td>16</td>
-                        <td>17</td>
-                        <td>18</td>
-                        <td>19</td>
-                        <td>20</td>
-                        <td>21</td>
-                        <td>22</td>
-                        <td>23</td>
-                        <td>24</td>
-                        <td>25</td>
-                        <td>26</td>
-                        <td>27</td>
-                        <td>28</td>
-                        <td>29</td>
-                        <td>30</td>
-                        <td>31</td>
-                        <td>32</td>
-                        <td>33</td>
-                        <td>34</td>
-                        <td>35</td>
-                        <td>36</td>
-                        <td>37</td>
-                        <td>38</td>
-                        <td>39</td>
-                        <td>40</td>
-                        <td>41</td>
-                        <td>42</td>
-                        <td>43</td>
-                        <td>44</td>
-                        <td>45</td>
-                        <td>46</td>
-                        <td>47</td>
-                        <td>48</td>
-                        <td>49</td>
-                        <td>50</td>
-                        <td>51</td>
-                        <td>52</td>
-                        <td>53</td>
-                        <td>54</td>
-                        <td>55</td>
-                        <td>56</td>
-                        <td>57</td>
-                        <td>58</td>
-                        <td>59</td>
-                        <td>60</td>
-                        <td>61</td>
-                        <td>62</td>
-                        <td>63</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th>Hex</th>
-                        <td>55</td>
-                        <td>72</td>
-                        <td>55</td>
-                        <td>36</td>
-                        <td>36</td>
-                        <td>e5</td>
-                        <td>e0</td>
-                        <td>e9</td>
-                        <td>7d</td>
-                        <td>40</td>
-                        <td>14</td>
-                        <td>ad</td>
-                        <td>48</td>
-                        <td>4e</td>
-                        <td>c5</td>
-                        <td>a8</td>
-                        <td>f8</td>
-                        <td>3e</td>
-                        <td>ed</td>
-                        <td>a8</td>
-                        <td>d3</td>
-                        <td>19</td>
-                        <td>fd</td>
-                        <td>39</td>
-                        <td>89</td>
-                        <td>77</td>
-                        <td>d2</td>
-                        <td>2a</td>
-                        <td>af</td>
-                        <td>3d</td>
-                        <td>46</td>
-                        <td>35</td>
-                        <td>1f</td>
-                        <td>36</td>
-                        <td>e3</td>
-                        <td>59</td>
-                        <td>41</td>
-                        <td>bc</td>
-                        <td>cc</td>
-                        <td>89</td>
-                        <td>53</td>
-                        <td>91</td>
-                        <td>35</td>
-                        <td>f9</td>
-                        <td>1c</td>
-                        <td>0d</td>
-                        <td>3d</td>
-                        <td>eb</td>
-                        <td>fe</td>
-                        <td>53</td>
-                        <td>c2</td>
-                        <td>7c</td>
-                        <td>01</td>
-                        <td>96</td>
-                        <td>49</td>
-                        <td>26</td>
-                        <td>f1</td>
-                        <td>16</td>
-                        <td>0b</td>
-                        <td>b8</td>
-                        <td>34</td>
-                        <td>af</td>
-                        <td>ae</td>
-                        <td>b5</td>
-                    </tr>
-                    <tr>
-                        <th>Base 10</th>
-                        <td>85</td>
-                        <td>114</td>
-                        <td>85</td>
-                        <td>54</td>
-                        <td>54</td>
-                        <td>229</td>
-                        <td>224</td>
-                        <td>233</td>
-                        <td>125</td>
-                        <td>64</td>
-                        <td>20</td>
-                        <td>173</td>
-                        <td>72</td>
-                        <td>78</td>
-                        <td>197</td>
-                        <td>168</td>
-                        <td>248</td>
-                        <td>62</td>
-                        <td>237</td>
-                        <td>168</td>
-                        <td>211</td>
-                        <td>25</td>
-                        <td>253</td>
-                        <td>57</td>
-                        <td>137</td>
-                        <td>119</td>
-                        <td>210</td>
-                        <td>42</td>
-                        <td>175</td>
-                        <td>61</td>
-                        <td>70</td>
-                        <td>53</td>
-                        <td>31</td>
-                        <td>54</td>
-                        <td>227</td>
-                        <td>89</td>
-                        <td>65</td>
-                        <td>188</td>
-                        <td>204</td>
-                        <td>137</td>
-                        <td>83</td>
-                        <td>145</td>
-                        <td>53</td>
-                        <td>249</td>
-                        <td>28</td>
-                        <td>13</td>
-                        <td>61</td>
-                        <td>235</td>
-                        <td>254</td>
-                        <td>83</td>
-                        <td>194</td>
-                        <td>124</td>
-                        <td>1</td>
-                        <td>150</td>
-                        <td>73</td>
-                        <td>38</td>
-                        <td>241</td>
-                        <td>22</td>
-                        <td>11</td>
-                        <td>184</td>
-                        <td>52</td>
-                        <td>175</td>
-                        <td>174</td>
-                        <td>181</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <hr/>
-            <div className="py-3">
-                <h5>Each set of 4 bytes is turned into a number in the range [0, 1). Only the first calculation is displayed for conciceness.</h5>
-            </div>
-            <div>(85/256^1) + (114/256^2) + (85/256^3) + (54/256^4)</div>
-            <div style={{whiteSpace: "nowrap"}}>= (0.33203125) + (0.001739501953125) + (0.000005066394805908203) + (1.979060471057892e-8)</div>
-            <div>= (0.33377583092078567)</div>
-        </form>
-        <form className="py-3">
-            <h2 className="text-center pb-3">Results</h2>
-            <div className="form-group">
-                <table className="table table-sm table-bordered">
-                    <thead>
-                    <tr>
-                        <th>Pin #</th>
-                        <th>Number</th>
-                        <th>Number*2</th>
-                        <th>Direction</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>0.33377583092078567</td>
-                        <td>0.6675516618415713</td>
-                        <td>Left</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>0.21444516838528216</td>
-                        <td>0.4288903367705643</td>
-                        <td>Left</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>0.48925904487259686</td>
-                        <td>0.9785180897451937</td>
-                        <td>Left</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>0.2824519667774439</td>
-                        <td>0.5649039335548878</td>
-                        <td>Left</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>0.9697102103382349</td>
-                        <td>1.9394204206764698</td>
-                        <td>Right</td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>0.8246153129730374</td>
-                        <td>1.6492306259460747</td>
-                        <td>Right</td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td>0.5369845726527274</td>
-                        <td>1.0739691453054547</td>
-                        <td>Right</td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td>0.6845287207979709</td>
-                        <td>1.3690574415959418</td>
-                        <td>Right</td>
-                    </tr>
-                    <tr>
-                        <td>9</td>
-                        <td>0.1219312755856663</td>
-                        <td>0.2438625511713326</td>
-                        <td>Left</td>
-                    </tr>
-                    <tr>
-                        <td>10</td>
-                        <td>0.25678709358908236</td>
-                        <td>0.5135741871781647</td>
-                        <td>Left</td>
-                    </tr>
-                    <tr>
-                        <td>11</td>
-                        <td>0.32643449143506587</td>
-                        <td>0.6528689828701317</td>
-                        <td>Left</td>
-                    </tr>
-                    <tr>
-                        <td>12</td>
-                        <td>0.10957705485634506</td>
-                        <td>0.21915410971269011</td>
-                        <td>Left</td>
-                    </tr>
-                    <tr>
-                        <td>13</td>
-                        <td>0.9934655716642737</td>
-                        <td>1.9869311433285475</td>
-                        <td>Right</td>
-                    </tr>
-                    <tr>
-                        <td>14</td>
-                        <td>0.006199428346008062</td>
-                        <td>0.012398856692016125</td>
-                        <td>Left</td>
-                    </tr>
-                    <tr>
-                        <td>15</td>
-                        <td>0.941742641851306</td>
-                        <td>1.883485283702612</td>
-                        <td>Right</td>
-                    </tr>
-                    <tr>
-                        <td>16</td>
-                        <td>0.20580570143647492</td>
-                        <td>0.41161140287294984</td>
-                        <td>Left</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </form>
+      <h1 className="text-center pb-3">Plinko verify</h1>
+      <hr />
+      <form className="py-3">
+        <h2 className="text-center">Input</h2>
+        <div className="form-group">
+          <input
+            placeholder="Client Seed"
+            value={clientSeed}
+            className="form-control"
+          />
         </div>
-  )
+        <div className="form-group">
+          <input
+            placeholder="Server Seed"
+            value={serverSeed}
+            className="form-control"
+          />
+        </div>
+        <div className="form-group">
+          <input placeholder="Nonce" value={nonce} className="form-control" />
+        </div>
+      </form>
+      <hr />
+      <form className="py-3">
+        <h2 className="text-center pb-3">Output</h2>
+        <div className="form-group">
+          <label>sha256(server_seed)</label>
+          <input
+            readonly="readonly"
+            value={serverHashed}
+            className="form-control"
+          />
+        </div>
+        <div className="form-group">
+          <label>hmac_sha512(client_seed:nonce, server_seed)</label>
+          <input
+            readonly="readonly"
+            value={clienthash}
+            className="form-control"
+          />
+        </div>
+        <hr />
+        <h5>Convert each set of four bytes into a number</h5>
+        <div className="form-group" style={{ overflowX: "auto" }}>
+          <table
+            className="table table-sm table-bordered"
+            style={{ width: "1200px", marginBottom: "0" }}
+          >
+            <thead>
+              <tr>
+                <th>#</th>
+                {Hash.map((val, rowID) => (
+                  <td key={rowID}>{val}</td>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Hex</th>
+                {result_hash_list().map((val, rowID) => (
+                  <td key={rowID}>{val}</td>
+                ))}
+              </tr>
+              <tr>
+                <th>Base 10</th>
+                {result_hash_list().map((val, rowID) => (
+                  <td key={rowID}>{hexToDecimal(val)}</td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <hr />
+        <div className="py-3">
+          <h5>
+            Each set of 4 bytes is turned into a number in the range (0, 1).
+            Only the first calculation is displayed for conciceness.
+          </h5>
+        </div>
+        <div>
+          ({hexToDecimal(result_hash_list()[0])}/256^1) + (
+          {hexToDecimal(result_hash_list()[1])}/256^2) + (
+          {hexToDecimal(result_hash_list()[2])}/256^3) + (
+          {hexToDecimal(result_hash_list()[3])}/256^4)
+        </div>
+        <div style={{ whiteSpace: "nowrap" }}>
+          = ({hexToDecimal(result_hash_list()[0]) / 256} ) + (
+          {hexToDecimal(result_hash_list()[1]) / (256 * 256)}) + (
+          {hexToDecimal(result_hash_list()[2]) / (256 * 256 * 256)} ) + (
+          {hexToDecimal(result_hash_list()[3]) / (256 * 256 * 256 * 256)})
+        </div>
+        <div>
+          = (
+          {hexToDecimal(result_hash_list()[0]) / 256 +
+            hexToDecimal(result_hash_list()[1]) / (256 * 256) +
+            hexToDecimal(result_hash_list()[2]) / (256 * 256 * 256) +
+            hexToDecimal(result_hash_list()[3]) / (256 * 256 * 256 * 256)}
+          )
+        </div>
+      </form>
+      <form className="py-3">
+        <h2 className="text-center pb-3">Results</h2>
+        <div className="form-group">
+          <table className="table table-sm table-bordered">
+            <thead>
+              <tr>
+                <th>Pin #</th>
+                <th>Number</th>
+                <th>Number*2</th>
+                <th>Direction</th>
+              </tr>
+            </thead>
+            <tbody>
+              {plinkoResult?.map((num, index) => (
+                <tr>
+                  <td>{index + 1}</td>
+                  <td>{num}</td>
+                  <td>{num * 2}</td>
+                  <td>{num > 0.5 ? "Right" : "Left"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </form>
+    </div>
+  );
 }
 
-export default PlinkoVerification
+export default PlinkoVerification;
