@@ -44,15 +44,15 @@ const App = () => {
         element={
           <section className="section">
             <div className="container">
-              <h1 className="title">
+              <h1 className="title mb-5">
                 BCW.CLUB/CRASH - Game Verification Script
               </h1>
-              <h2 className="subtitle">
+              <h2 className="subtitle mb-4">
                 Third party script used to verify games on crash game.
               </h2>
             </div>
             <hr />
-            <div className="container">
+            <div className="container text-center py-3">
               <p>
                 The following sites have purchased a non-distributable copy of
                 the previous version of bcw.club's source code, exempting them
@@ -65,14 +65,12 @@ const App = () => {
               </p>
             </div>
             <hr />
-
-            <hr />
-            <div className="container">
+            <div className="container py-3">
               <div className="field">
                 <label className="label">Game's hash</label>
                 <p className="control has-icons-left">
                   <input
-                    className="input"
+                    className="input form-control"
                     type="text"
                     id="game_hash_input"
                     placeholder="Game's hash (SHA256)"
@@ -90,7 +88,7 @@ const App = () => {
                 <label className="label">Salt</label>
                 <p className="control has-icons-left">
                   <input
-                    className="input"
+                    className="input form-control"
                     type="text"
                     id="game_salt_input"
                     placeholder="Salt"
@@ -108,7 +106,7 @@ const App = () => {
                 <label className="label">Amount of games</label>
                 <p className="control has-icons-left">
                   <input
-                    className="input"
+                    className="input form-control"
                     type="number"
                     id="game_amount_input"
                     min="1"
@@ -127,14 +125,7 @@ const App = () => {
               </div>
               <div className="field is-grouped justified">
                 <p className="control">
-                  <button
-                    style={{
-                      background: "grey",
-                      border: "none",
-                      color: "black",
-                      opacity: "80%",
-                    }}
-                    className="button is-primary"
+                  <button className="button is-primary primary-btn"
                     id="game_verify_submit"
                     onClick={handleVerify}
                   >
@@ -153,7 +144,7 @@ const App = () => {
               </div>
             </div>
             <hr />
-            <div className="container">
+            <div className="container mt-4">
               <table
                 className="table is-striped is-fullwidth is-hoverable is-narrow"
                 style={{
