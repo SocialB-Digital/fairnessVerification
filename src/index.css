@@ -10,6 +10,12 @@ label, .label { color: #fff; }
 *::-webkit-scrollbar-thumb { background: #000; border-radius: 10px; }
 *::-webkit-scrollbar-thumb:hover { background: #000; }
 h1, h2, h3, h4, h5, h6 { margin: 0; padding: 0; margin-bottom: 20px; }
+h1{ font-size: 36px; }
+h2{ font-size: 30px; }
+h3{ font-size: 26px; }
+h4{ font-size: 20px; }
+h5{ font-size: 18px; }
+h6{ font-size: 16px; }
 .primary-btn { border-radius: 5px; padding: 14px 20px; color: #fff; font-family: "Orbitron", sans-serif; font-size: 14px; letter-spacing: 1px; background: linear-gradient(0deg, #18599c 0%, #5d8fc4 100%); border: none !important; }
 .primary-btn-bg:hover { background: linear-gradient(0deg, #113f6d 0%, #497db1 100%); }
 .main { width: 800px; margin: 50px auto; }
@@ -23,10 +29,11 @@ h1, h2, h3, h4, h5, h6 { margin: 0; padding: 0; margin-bottom: 20px; }
 .cardbox.active .index, .cardbox:hover .index { bottom: 0; }
 .cardbox { position: relative; display: inline-block; height: 80px; padding: 15px 15px; }
 .card { position: absolute; cursor: pointer; width: 40px; height: 60px; background-color: #e8e7f1; border-radius: 2px; line-height: 16px; box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); }
-.form-control { background: #16171a !important; border: none; outline: none; box-shadow: none; color: #646464; padding: 1rem; border: solid 0.06rem #16171a; width: 100%; border-radius: 4px; font-weight: normal; color: #fff; }
+.form-control { background: #16171a !important; border: none; outline: none; box-shadow: none; color: #646464; padding: 1rem; border: solid 0.06rem #16171a; width: 100%; border-radius: 4px; font-weight: normal; color: #fff; border: none !important; }
 .form-control:focus, .form-control:active { background: #16171a; border: none; outline: none; box-shadow: none; color: #646464; border: solid 0.06rem #16171a; }
 .form-control::-moz-placeholder { color: #646464; opacity: 1; }
 .form-control::placeholder { color: #646464; opacity: 1; }
+.form-control:hover{ border: none !important; }
 table th { background: #000000; color: #fff !important; border: solid 1px #000 !important; }
 table td { border: solid 1px #000 !important; background: #16171a; color: #fff !important; }
 hr { border-top: solid 1px #000; margin: 0; }
